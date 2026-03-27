@@ -1,0 +1,2438 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Algorithms Fundamentals — Interactive Tutorial</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=DM+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #0f1117;
+        --bg-card: #181b24;
+        --bg-card-alt: #1e2230;
+        --bg-code: #12141c;
+        --border: #2a2e3d;
+        --border-accent: #3d4260;
+        --text: #e2e4ed;
+        --text-dim: #8b8fa4;
+        --text-code: #c5cad8;
+        --accent: #6c8cff;
+        --accent-glow: rgba(108, 140, 255, 0.15);
+        --accent2: #ff7b72;
+        --accent3: #7ee787;
+        --accent4: #d2a8ff;
+        --accent5: #ffa657;
+        --accent6: #79c0ff;
+        --warn: #ffd666;
+        --success: #7ee787;
+        --serif: "Source Serif 4", Georgia, serif;
+        --sans: "DM Sans", system-ui, sans-serif;
+        --mono: "JetBrains Mono", "Fira Code", monospace;
+        --radius: 10px;
+        --shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+        --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      html {
+        scroll-behavior: smooth;
+        font-size: 17px;
+      }
+
+      body {
+        font-family: var(--sans);
+        background: var(--bg);
+        color: var(--text);
+        line-height: 1.7;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      ::selection {
+        background: var(--accent);
+        color: #fff;
+      }
+
+      /* ─── LAYOUT ─── */
+      .container {
+        max-width: 860px;
+        margin: 0 auto;
+        padding: 0 1.5rem;
+      }
+
+      /* ─── HERO ─── */
+      .hero {
+        position: relative;
+        padding: 5rem 0 4rem;
+        text-align: center;
+        overflow: hidden;
+      }
+      .hero::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(
+          ellipse 70% 50% at 50% 0%,
+          rgba(108, 140, 255, 0.08),
+          transparent 70%
+        );
+        pointer-events: none;
+      }
+      .hero-badge {
+        display: inline-block;
+        font-family: var(--mono);
+        font-size: 0.72rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--accent);
+        background: var(--accent-glow);
+        border: 1px solid rgba(108, 140, 255, 0.25);
+        padding: 0.35rem 1rem;
+        border-radius: 100px;
+        margin-bottom: 1.5rem;
+      }
+      .hero h1 {
+        font-family: var(--serif);
+        font-size: clamp(2.2rem, 5vw, 3.2rem);
+        font-weight: 700;
+        line-height: 1.15;
+        letter-spacing: -0.02em;
+        margin-bottom: 1rem;
+      }
+      .hero h1 span {
+        color: var(--accent);
+      }
+      .hero p {
+        font-size: 1.05rem;
+        color: var(--text-dim);
+        max-width: 540px;
+        margin: 0 auto 2rem;
+      }
+
+      /* ─── NAV ─── */
+      .toc {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.6rem;
+        justify-content: center;
+        margin-bottom: 1rem;
+      }
+      .toc a {
+        font-family: var(--mono);
+        font-size: 0.78rem;
+        color: var(--text-dim);
+        text-decoration: none;
+        padding: 0.45rem 1rem;
+        border: 1px solid var(--border);
+        border-radius: 100px;
+        transition: var(--transition);
+      }
+      .toc a:hover {
+        border-color: var(--accent);
+        color: var(--accent);
+        background: var(--accent-glow);
+      }
+
+      /* ─── SECTIONS ─── */
+      .section {
+        padding: 4rem 0 2rem;
+        border-top: 1px solid var(--border);
+      }
+      .section-num {
+        font-family: var(--mono);
+        font-size: 0.72rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--accent);
+        margin-bottom: 0.5rem;
+      }
+      .section h2 {
+        font-family: var(--serif);
+        font-size: clamp(1.6rem, 3vw, 2.1rem);
+        font-weight: 700;
+        letter-spacing: -0.01em;
+        margin-bottom: 1rem;
+      }
+      .section h3 {
+        font-family: var(--serif);
+        font-size: 1.3rem;
+        font-weight: 600;
+        margin: 2.5rem 0 0.8rem;
+        color: var(--text);
+      }
+      .section h4 {
+        font-family: var(--sans);
+        font-size: 1rem;
+        font-weight: 600;
+        margin: 1.8rem 0 0.6rem;
+        color: var(--accent6);
+      }
+
+      p {
+        margin-bottom: 1rem;
+      }
+      p + p {
+        margin-top: 0;
+      }
+
+      strong {
+        color: #fff;
+        font-weight: 600;
+      }
+
+      ul,
+      ol {
+        margin: 0.5rem 0 1rem 1.5rem;
+      }
+      li {
+        margin-bottom: 0.35rem;
+      }
+
+      .callout {
+        background: var(--bg-card);
+        border-left: 3px solid var(--accent);
+        padding: 1rem 1.2rem;
+        border-radius: 0 var(--radius) var(--radius) 0;
+        margin: 1.5rem 0;
+        font-size: 0.95rem;
+      }
+      .callout.warn {
+        border-left-color: var(--warn);
+      }
+      .callout.success {
+        border-left-color: var(--success);
+      }
+
+      .inline-code {
+        font-family: var(--mono);
+        font-size: 0.85em;
+        background: var(--bg-card-alt);
+        padding: 0.15em 0.45em;
+        border-radius: 4px;
+        color: var(--accent6);
+      }
+
+      /* ─── CODE BLOCKS ─── */
+      .code-wrap {
+        position: relative;
+        margin: 1.2rem 0 1.5rem;
+        border-radius: var(--radius);
+        background: var(--bg-code);
+        border: 1px solid var(--border);
+        overflow: hidden;
+      }
+      .code-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.5rem 1rem;
+        background: rgba(255, 255, 255, 0.02);
+        border-bottom: 1px solid var(--border);
+        font-family: var(--mono);
+        font-size: 0.72rem;
+        color: var(--text-dim);
+      }
+      .code-header .lang {
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+      .copy-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+        background: none;
+        border: 1px solid var(--border);
+        color: var(--text-dim);
+        font-family: var(--mono);
+        font-size: 0.7rem;
+        padding: 0.25rem 0.7rem;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: var(--transition);
+      }
+      .copy-btn:hover {
+        border-color: var(--accent);
+        color: var(--accent);
+      }
+      .copy-btn.copied {
+        border-color: var(--success);
+        color: var(--success);
+      }
+      pre {
+        margin: 0;
+        padding: 1.2rem 1.4rem;
+        overflow-x: auto;
+        font-family: var(--mono);
+        font-size: 0.82rem;
+        line-height: 1.7;
+        color: var(--text-code);
+        tab-size: 4;
+      }
+
+      /* Syntax highlighting */
+      .kw {
+        color: var(--accent4);
+      } /* keywords */
+      .tp {
+        color: var(--accent6);
+      } /* types */
+      .fn {
+        color: #dcdcaa;
+      } /* functions */
+      .str {
+        color: var(--accent3);
+      } /* strings */
+      .num {
+        color: var(--accent5);
+      } /* numbers */
+      .cm {
+        color: #6a7089;
+        font-style: italic;
+      } /* comments */
+      .op {
+        color: var(--accent2);
+      } /* operators */
+      .an {
+        color: #d4d4d4;
+      } /* annotations */
+
+      /* ─── COMPLEXITY TABLE ─── */
+      .bigo-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1.5rem 0;
+        font-size: 0.9rem;
+      }
+      .bigo-table th {
+        text-align: left;
+        padding: 0.7rem 1rem;
+        border-bottom: 2px solid var(--border-accent);
+        font-family: var(--mono);
+        font-size: 0.78rem;
+        color: var(--accent);
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+      }
+      .bigo-table td {
+        padding: 0.65rem 1rem;
+        border-bottom: 1px solid var(--border);
+        vertical-align: top;
+      }
+      .bigo-table tr:last-child td {
+        border-bottom: none;
+      }
+      .bigo-table .bigo-name {
+        font-family: var(--mono);
+        color: var(--accent6);
+        white-space: nowrap;
+      }
+
+      /* ─── COLLAPSIBLE Q&A ─── */
+      .qa-block {
+        margin: 1.5rem 0;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        overflow: hidden;
+      }
+      .qa-question {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.8rem;
+        padding: 1rem 1.2rem;
+        background: var(--bg-card);
+        cursor: pointer;
+        user-select: none;
+        transition: var(--transition);
+      }
+      .qa-question:hover {
+        background: var(--bg-card-alt);
+      }
+      .qa-icon {
+        flex-shrink: 0;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background: var(--accent-glow);
+        border: 1px solid rgba(108, 140, 255, 0.3);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: var(--mono);
+        font-size: 0.7rem;
+        color: var(--accent);
+        transition: var(--transition);
+      }
+      .qa-block.open .qa-icon {
+        transform: rotate(45deg);
+        background: var(--accent);
+        color: #fff;
+      }
+      .qa-question-text {
+        font-weight: 600;
+        font-size: 0.95rem;
+      }
+      .qa-answer {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.4s ease;
+      }
+      .qa-answer-inner {
+        padding: 1.2rem;
+        border-top: 1px solid var(--border);
+        background: var(--bg-card-alt);
+      }
+      .qa-block.open .qa-answer {
+        max-height: 3000px;
+      }
+
+      /* ─── INTERACTIVE VIS ─── */
+      .viz-container {
+        margin: 2rem 0;
+        padding: 1.5rem;
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+      }
+      .viz-container h4 {
+        margin: 0 0 1rem;
+        font-family: var(--mono);
+        font-size: 0.82rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--accent);
+      }
+
+      canvas {
+        display: block;
+        width: 100%;
+        border-radius: 6px;
+      }
+
+      /* ─── ANIMATION PANELS ─── */
+      .anim-panel {
+        margin: 1.5rem 0;
+        padding: 1.2rem;
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+      }
+      .anim-controls {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        margin-bottom: 1rem;
+      }
+      .anim-btn {
+        font-family: var(--mono);
+        font-size: 0.78rem;
+        padding: 0.4rem 1rem;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        background: var(--bg-card-alt);
+        color: var(--text);
+        cursor: pointer;
+        transition: var(--transition);
+      }
+      .anim-btn:hover {
+        border-color: var(--accent);
+        color: var(--accent);
+      }
+      .anim-btn.active {
+        background: var(--accent);
+        color: #fff;
+        border-color: var(--accent);
+      }
+
+      .array-viz {
+        display: flex;
+        gap: 4px;
+        flex-wrap: wrap;
+        margin: 1rem 0;
+        justify-content: center;
+      }
+      .array-cell {
+        width: 48px;
+        height: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: var(--mono);
+        font-size: 0.85rem;
+        font-weight: 600;
+        border-radius: 6px;
+        background: var(--bg-card-alt);
+        border: 2px solid var(--border);
+        transition: all 0.3s ease;
+        position: relative;
+      }
+      .array-cell.highlight {
+        border-color: var(--accent);
+        background: var(--accent-glow);
+        color: var(--accent);
+      }
+      .array-cell.found {
+        border-color: var(--success);
+        background: rgba(126, 231, 135, 0.15);
+        color: var(--success);
+      }
+      .array-cell.eliminated {
+        opacity: 0.3;
+      }
+      .array-cell.mid {
+        border-color: var(--warn);
+        background: rgba(255, 214, 102, 0.15);
+        color: var(--warn);
+      }
+      .array-cell.insert-target {
+        border-color: var(--accent5);
+        background: rgba(255, 166, 87, 0.12);
+      }
+      .array-cell.shift {
+        transform: translateX(52px);
+      }
+
+      .anim-log {
+        font-family: var(--mono);
+        font-size: 0.78rem;
+        color: var(--text-dim);
+        min-height: 2rem;
+        padding: 0.8rem;
+        background: var(--bg-code);
+        border-radius: 6px;
+        line-height: 1.6;
+      }
+      .anim-log .step {
+        color: var(--accent);
+      }
+      .anim-log .found-msg {
+        color: var(--success);
+      }
+      .anim-log .not-found {
+        color: var(--accent2);
+      }
+
+      /* ─── RECURSION TREE ─── */
+      .tree-svg {
+        width: 100%;
+      }
+      .tree-node {
+        transition: all 0.4s ease;
+      }
+      .tree-node circle {
+        fill: var(--bg-card-alt);
+        stroke: var(--border-accent);
+        stroke-width: 2;
+        transition: all 0.3s ease;
+      }
+      .tree-node.active circle {
+        fill: var(--accent-glow);
+        stroke: var(--accent);
+      }
+      .tree-node.done circle {
+        fill: rgba(126, 231, 135, 0.15);
+        stroke: var(--success);
+      }
+      .tree-node text {
+        fill: var(--text-dim);
+        font-family: var(--mono);
+        font-size: 11px;
+        text-anchor: middle;
+        dominant-baseline: central;
+      }
+      .tree-node.active text {
+        fill: var(--accent);
+      }
+      .tree-node.done text {
+        fill: var(--success);
+      }
+      .tree-edge {
+        stroke: var(--border);
+        stroke-width: 1.5;
+        fill: none;
+      }
+
+      /* ─── GROWTH TABLE ─── */
+      .growth-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1rem 0;
+        font-size: 0.82rem;
+        font-family: var(--mono);
+      }
+      .growth-table th {
+        padding: 0.5rem 0.7rem;
+        border-bottom: 2px solid var(--border-accent);
+        text-align: right;
+        color: var(--accent);
+        font-size: 0.75rem;
+      }
+      .growth-table th:first-child {
+        text-align: left;
+      }
+      .growth-table td {
+        padding: 0.45rem 0.7rem;
+        border-bottom: 1px solid var(--border);
+        text-align: right;
+        color: var(--text-dim);
+      }
+      .growth-table td:first-child {
+        text-align: left;
+        color: var(--accent6);
+      }
+      .growth-table .huge {
+        color: var(--accent2);
+      }
+
+      /* ─── FOOTER ─── */
+      footer {
+        padding: 3rem 0;
+        border-top: 1px solid var(--border);
+        text-align: center;
+        color: var(--text-dim);
+        font-size: 0.85rem;
+      }
+      footer strong {
+        color: var(--accent);
+        font-weight: 600;
+      }
+      footer .subtitle {
+        font-size: 0.78rem;
+        margin-top: 0.3rem;
+      }
+
+      /* ─── RESPONSIVE ─── */
+      @media (max-width: 640px) {
+        html {
+          font-size: 15.5px;
+        }
+        pre {
+          font-size: 0.76rem;
+          padding: 1rem;
+        }
+        .array-cell {
+          width: 38px;
+          height: 38px;
+          font-size: 0.75rem;
+        }
+        .hero {
+          padding: 3rem 0 2.5rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ═══════════════════════════ HERO ═══════════════════════════ -->
+    <header class="hero">
+      <div class="container">
+        <div class="hero-badge">Interactive Tutorial</div>
+        <h1>Algorithms <span>Fundamentals</span></h1>
+        <p>
+          A hands-on guide to complexity analysis, recursion, searching, and
+          array operations — with live visualizations and practice problems.
+        </p>
+        <nav class="toc">
+          <a href="#sec-bigo">Big O</a>
+          <a href="#sec-recursion">Recursion</a>
+          <a href="#sec-search">Searching</a>
+          <a href="#sec-arrays">Arrays</a>
+          <a href="#sec-reference">Code Reference</a>
+        </nav>
+      </div>
+      <!-- ═══════════════════════════ FOOTER ═══════════════════════════ -->
+      <div class="container">
+        <br />
+        <p>
+          Created by
+          <strong><span style="color: #6c8cff">Khaled Sokkar</span></strong> :
+          Teaching Assistant &amp; Offensive Security Engineer
+        </p>
+      </div>
+    </header>
+
+    <main class="container">
+      <!-- ═══════════════════════════ SECTION 1: BIG O ═══════════════════════════ -->
+      <section class="section" id="sec-bigo">
+        <div class="section-num">Chapter 01</div>
+        <h2>Complexity Analysis &amp; Big O Notation</h2>
+
+        <p>
+          Imagine you're looking for a friend's name in a phone book. You could
+          start at page 1 and check every single name — that works, but it's
+          slow. Or you could open the book to the middle, see if your friend's
+          name comes before or after that page, and keep halving. Both
+          approaches <em>work</em>, but one is dramatically faster as the book
+          gets bigger.
+        </p>
+
+        <p>
+          <strong>Big O notation</strong> is how we describe that difference
+          precisely. It tells us how an algorithm's running time grows as the
+          input size <em>n</em> increases — not the exact number of seconds, but
+          the <em>shape</em> of the growth curve.
+        </p>
+
+        <div class="callout">
+          <strong>Key insight:</strong> Big O doesn't measure speed in
+          milliseconds. It measures <em>scalability</em> — how does the work
+          change when we double the input? That's what matters when you go from
+          1,000 users to 1,000,000.
+        </div>
+
+        <h3>The Big O Family</h3>
+
+        <table class="bigo-table">
+          <thead>
+            <tr>
+              <th>Notation</th>
+              <th>Name</th>
+              <th>Intuition</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="bigo-name">O(1)</td>
+              <td>Constant</td>
+              <td>
+                Same work no matter the input size. Like checking if a light
+                switch is on.
+              </td>
+            </tr>
+            <tr>
+              <td class="bigo-name">O(log n)</td>
+              <td>Logarithmic</td>
+              <td>
+                Halves the problem each step. Like binary search in a phone
+                book.
+              </td>
+            </tr>
+            <tr>
+              <td class="bigo-name">O(n)</td>
+              <td>Linear</td>
+              <td>Touch each element once. Like counting people in a line.</td>
+            </tr>
+            <tr>
+              <td class="bigo-name">O(n log n)</td>
+              <td>Linearithmic</td>
+              <td>
+                Efficient sorting (Merge Sort, Arrays.sort). Slightly more than
+                linear.
+              </td>
+            </tr>
+            <tr>
+              <td class="bigo-name">O(n²)</td>
+              <td>Quadratic</td>
+              <td>
+                Every element compared with every other. Like a round-robin
+                tournament.
+              </td>
+            </tr>
+            <tr>
+              <td class="bigo-name">O(n³)</td>
+              <td>Cubic</td>
+              <td>Triple nested loops. Matrix multiplication (naïve).</td>
+            </tr>
+            <tr>
+              <td class="bigo-name">O(2ⁿ)</td>
+              <td>Exponential</td>
+              <td>
+                Doubles with each added element. Like listing all subsets.
+              </td>
+            </tr>
+            <tr>
+              <td class="bigo-name">O(n!)</td>
+              <td>Factorial</td>
+              <td>
+                All permutations. Practical only for tiny inputs (n ≤ 12 or so).
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>How to Calculate Big O: A Step-by-Step Method</h3>
+
+        <p>Here's a reliable process you can follow for any piece of code:</p>
+
+        <ol>
+          <li>
+            <strong>Identify each operation</strong> — assignments, comparisons,
+            arithmetic are all O(1).
+          </li>
+          <li>
+            <strong>Count loop iterations</strong> — how many times does each
+            loop run relative to <em>n</em>?
+          </li>
+          <li>
+            <strong>Multiply nested loops</strong> — if an inner loop runs
+            <em>m</em> times for <em>each</em> iteration of an outer loop that
+            runs <em>n</em> times, that's O(n × m).
+          </li>
+          <li>
+            <strong>Add sequential blocks</strong> — if two loops run one after
+            the other, add them: O(n) + O(n) = O(n).
+          </li>
+          <li>
+            <strong>Drop constants and lower-order terms</strong> — O(3n + 5)
+            becomes O(n); O(n² + n) becomes O(n²).
+          </li>
+        </ol>
+
+        <h3>Growth Comparison</h3>
+        <p>
+          To see <em>why</em> Big O matters, look at how these functions grow
+          with input size:
+        </p>
+
+        <table class="growth-table">
+          <thead>
+            <tr>
+              <th>Complexity</th>
+              <th>n = 10</th>
+              <th>n = 100</th>
+              <th>n = 1,000</th>
+              <th>n = 10,000</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>O(1)</td>
+              <td>1</td>
+              <td>1</td>
+              <td>1</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <td>O(log n)</td>
+              <td>3</td>
+              <td>7</td>
+              <td>10</td>
+              <td>13</td>
+            </tr>
+            <tr>
+              <td>O(n)</td>
+              <td>10</td>
+              <td>100</td>
+              <td>1,000</td>
+              <td>10,000</td>
+            </tr>
+            <tr>
+              <td>O(n log n)</td>
+              <td>33</td>
+              <td>664</td>
+              <td>9,966</td>
+              <td>132,877</td>
+            </tr>
+            <tr>
+              <td>O(n²)</td>
+              <td>100</td>
+              <td>10,000</td>
+              <td>1,000,000</td>
+              <td>100,000,000</td>
+            </tr>
+            <tr>
+              <td>O(2ⁿ)</td>
+              <td>1,024</td>
+              <td class="huge">1.27 × 10³⁰</td>
+              <td class="huge">∞ (huge)</td>
+              <td class="huge">∞ (huge)</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Interactive Chart -->
+        <div class="viz-container">
+          <h4>Interactive Growth Curve Visualizer</h4>
+          <p
+            style="
+              font-size: 0.85rem;
+              color: var(--text-dim);
+              margin-bottom: 1rem;
+            "
+          >
+            Hover over the chart to see exact values at any input size.
+          </p>
+          <canvas id="bigoChart" height="320"></canvas>
+          <div
+            style="
+              display: flex;
+              gap: 0.5rem;
+              flex-wrap: wrap;
+              margin-top: 1rem;
+            "
+            id="chartLegend"
+          ></div>
+        </div>
+
+        <h3>Java Examples with Complexity Walkthroughs</h3>
+
+        <h4>Example 1 — O(1): Constant Time</h4>
+        <div class="code-wrap">
+          <div class="code-header">
+            <span class="lang">Java</span
+            ><button class="copy-btn" onclick="copyCode(this)">Copy</button>
+          </div>
+          <pre><span class="cm">// O(1) — Constant Time</span>
+<span class="cm">// No matter how big the array is, we always do the same work.</span>
+<span class="kw">public static</span> <span class="tp">int</span> <span class="fn">getFirst</span>(<span class="tp">int</span>[] arr) {
+    <span class="kw">return</span> arr[<span class="num">0</span>];  <span class="cm">// One operation, always</span>
+}</pre>
+        </div>
+        <p>
+          <strong>Walkthrough:</strong> There's exactly one array access
+          regardless of whether <span class="inline-code">arr</span> has 10
+          elements or 10 million. No loops, no recursion — the work is fixed.
+          <strong>→ O(1)</strong>
+        </p>
+
+        <h4>Example 2 — O(n): Linear Time</h4>
+        <div class="code-wrap">
+          <div class="code-header">
+            <span class="lang">Java</span
+            ><button class="copy-btn" onclick="copyCode(this)">Copy</button>
+          </div>
+          <pre><span class="cm">// O(n) — Linear Time</span>
+<span class="cm">// We visit every element exactly once.</span>
+<span class="kw">public static</span> <span class="tp">int</span> <span class="fn">sum</span>(<span class="tp">int</span>[] arr) {
+    <span class="tp">int</span> total = <span class="num">0</span>;              <span class="cm">// O(1)</span>
+    <span class="kw">for</span> (<span class="tp">int</span> i = <span class="num">0</span>; i &lt; arr.length; i++) {  <span class="cm">// Runs n times</span>
+        total += arr[i];         <span class="cm">// O(1) per iteration</span>
+    }
+    <span class="kw">return</span> total;               <span class="cm">// O(1)</span>
+}</pre>
+        </div>
+        <p>
+          <strong>Walkthrough:</strong> The loop executes <em>n</em> times (once
+          for each element). Inside the loop, we do O(1) work. Total: 1 + n × 1
+          + 1 = n + 2. Drop constants → <strong>O(n)</strong>.
+        </p>
+
+        <h4>Example 3 — O(n²): Quadratic Time</h4>
+        <div class="code-wrap">
+          <div class="code-header">
+            <span class="lang">Java</span
+            ><button class="copy-btn" onclick="copyCode(this)">Copy</button>
+          </div>
+          <pre><span class="cm">// O(n²) — Quadratic Time (Bubble Sort)</span>
+<span class="cm">// Each element potentially compared with every other element.</span>
+<span class="kw">public static void</span> <span class="fn">bubbleSort</span>(<span class="tp">int</span>[] arr) {
+    <span class="tp">int</span> n = arr.length;
+    <span class="kw">for</span> (<span class="tp">int</span> i = <span class="num">0</span>; i &lt; n - <span class="num">1</span>; i++) {         <span class="cm">// Outer: runs n-1 times</span>
+        <span class="kw">for</span> (<span class="tp">int</span> j = <span class="num">0</span>; j &lt; n - i - <span class="num">1</span>; j++) { <span class="cm">// Inner: runs n-i-1 times</span>
+            <span class="kw">if</span> (arr[j] > arr[j + <span class="num">1</span>]) {       <span class="cm">// Compare adjacent</span>
+                <span class="tp">int</span> temp = arr[j];              <span class="cm">// Swap if needed</span>
+                arr[j] = arr[j + <span class="num">1</span>];
+                arr[j + <span class="num">1</span>] = temp;
+            }
+        }
+    }
+}</pre>
+        </div>
+        <p>
+          <strong>Walkthrough:</strong> The inner loop runs (n-1) + (n-2) + … +
+          1 = n(n-1)/2 times total. That's n²/2 - n/2. Drop the constant ½ and
+          the lower-order term → <strong>O(n²)</strong>.
+        </p>
+
+        <h4>Example 4 — O(log n): Logarithmic Time</h4>
+        <div class="code-wrap">
+          <div class="code-header">
+            <span class="lang">Java</span
+            ><button class="copy-btn" onclick="copyCode(this)">Copy</button>
+          </div>
+          <pre><span class="cm">// O(log n) — Logarithmic Time</span>
+<span class="cm">// Each iteration cuts the problem in half.</span>
+<span class="kw">public static</span> <span class="tp">int</span> <span class="fn">binarySearch</span>(<span class="tp">int</span>[] arr, <span class="tp">int</span> target) {
+    <span class="tp">int</span> low = <span class="num">0</span>, high = arr.length - <span class="num">1</span>;
+    <span class="kw">while</span> (low &lt;= high) {               <span class="cm">// How many times can we halve n?</span>
+        <span class="tp">int</span> mid = low + (high - low) / <span class="num">2</span>; <span class="cm">// Avoids integer overflow</span>
+        <span class="kw">if</span> (arr[mid] == target) <span class="kw">return</span> mid;
+        <span class="kw">else if</span> (arr[mid] &lt; target) low = mid + <span class="num">1</span>;
+        <span class="kw">else</span> high = mid - <span class="num">1</span>;
+    }
+    <span class="kw">return</span> -<span class="num">1</span>;
+}</pre>
+        </div>
+        <p>
+          <strong>Walkthrough:</strong> Each iteration halves the search space.
+          Starting from <em>n</em> elements: n → n/2 → n/4 → … → 1. That's
+          log₂(n) halvings. <strong>→ O(log n)</strong>.
+        </p>
+
+        <h4>Example 5 — O(n log n): Linearithmic Time</h4>
+        <div class="code-wrap">
+          <div class="code-header">
+            <span class="lang">Java</span
+            ><button class="copy-btn" onclick="copyCode(this)">Copy</button>
+          </div>
+          <pre><span class="cm">// O(n log n) — Linearithmic Time</span>
+<span class="cm">// Outer loop: log n (halving step). Inner loop: up to n iterations.</span>
+<span class="kw">public static void</span> <span class="fn">nLogNDemo</span>(<span class="tp">int</span> n) {
+    <span class="kw">for</span> (<span class="tp">int</span> i = <span class="num">1</span>; i &lt; n; i *= <span class="num">2</span>) {  <span class="cm">// i doubles each time → log n iterations</span>
+        <span class="kw">for</span> (<span class="tp">int</span> j = <span class="num">0</span>; j &lt; n; j++) { <span class="cm">// Always runs n times</span>
+            <span class="cm">// O(1) work</span>
+        }
+    }
+}</pre>
+        </div>
+        <p>
+          <strong>Walkthrough:</strong> The outer loop runs log₂(n) times (i
+          doubles: 1, 2, 4, 8, … n). For <em>each</em> outer iteration, the
+          inner loop runs exactly <em>n</em> times. Multiply: log(n) × n =
+          <strong>O(n log n)</strong>.
+        </p>
+
+        <h3>Practice Problems</h3>
+
+        <div class="qa-block" onclick="this.classList.toggle('open')">
+          <div class="qa-question">
+            <div class="qa-icon">+</div>
+            <div class="qa-question-text">
+              Q1: What is the time complexity of this code?<br /><code
+                style="font-size: 0.82rem; color: var(--text-dim)"
+                >for (int i = 0; i &lt; n; i++) { for (int j = 0; j &lt; 100;
+                j++) { /* O(1) */ } }</code
+              >
+            </div>
+          </div>
+          <div class="qa-answer">
+            <div class="qa-answer-inner">
+              <p><strong>Answer: O(n)</strong></p>
+              <p>
+                The outer loop runs <em>n</em> times. The inner loop always runs
+                exactly 100 times — that's a <em>constant</em>, not dependent on
+                <em>n</em>. So the total work is 100 × n = 100n. Drop the
+                constant → <strong>O(n)</strong>.
+              </p>
+              <p>
+                Common trap: students see nested loops and immediately think
+                O(n²). But the inner loop bound must <em>depend on n</em> for
+                that to be the case.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="qa-block" onclick="this.classList.toggle('open')">
+          <div class="qa-question">
+            <div class="qa-icon">+</div>
+            <div class="qa-question-text">
+              Q2: What is the time complexity?<br /><code
+                style="font-size: 0.82rem; color: var(--text-dim)"
+                >for (int i = 0; i &lt; n; i++) { /* O(1) */ } &nbsp; for (int j
+                = 0; j &lt; n; j++) { for (int k = 0; k &lt; n; k++) { /* O(1)
+                */ } }</code
+              >
+            </div>
+          </div>
+          <div class="qa-answer">
+            <div class="qa-answer-inner">
+              <p><strong>Answer: O(n²)</strong></p>
+              <p>
+                The first loop contributes O(n). The second block has nested
+                loops: n × n = O(n²). Sequential blocks are added: O(n) + O(n²)
+                = O(n² + n). Drop the lower-order term → <strong>O(n²)</strong>.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="qa-block" onclick="this.classList.toggle('open')">
+          <div class="qa-question">
+            <div class="qa-icon">+</div>
+            <div class="qa-question-text">
+              Q3: What is the time complexity?<br /><code
+                style="font-size: 0.82rem; color: var(--text-dim)"
+                >for (int i = n; i >= 1; i /= 2) { for (int j = 0; j &lt; i;
+                j++) { /* O(1) */ } }</code
+              >
+            </div>
+          </div>
+          <div class="qa-answer">
+            <div class="qa-answer-inner">
+              <p><strong>Answer: O(n)</strong></p>
+              <p>
+                The outer loop halves <em>i</em> each time: n, n/2, n/4, …, 1.
+                The inner loop runs <em>i</em> times. Total iterations: n + n/2
+                + n/4 + … + 1 = 2n - 1 (geometric series). Drop constant →
+                <strong>O(n)</strong>.
+              </p>
+              <p>
+                This is a classic trick question — the nested structure suggests
+                O(n log n) or worse, but the geometric sum collapses to linear.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════ SECTION 2: RECURSION ═══════════════════════════ -->
+      <section class="section" id="sec-recursion">
+        <div class="section-num">Chapter 02</div>
+        <h2>Recursion</h2>
+
+        <p>
+          Recursion is when a function calls itself to solve a smaller version
+          of the same problem. Think of it like Russian nesting dolls — you open
+          one, and inside is a slightly smaller version of the same doll, until
+          you reach the tiniest one at the center (the
+          <strong>base case</strong>).
+        </p>
+
+        <p>Every recursive function needs two things:</p>
+        <ol>
+          <li>
+            <strong>Base case</strong> — the simplest scenario where the answer
+            is immediate (stops the recursion).
+          </li>
+          <li>
+            <strong>Recursive case</strong> — break the problem into a smaller
+            sub-problem and call yourself.
+          </li>
+        </ol>
+
+        <div class="callout warn">
+          <strong>Warning:</strong> Forgetting the base case → infinite
+          recursion → <span class="inline-code">StackOverflowError</span>.
+          Always define your stopping condition first.
+        </div>
+
+        <h3>Example 1 — Factorial (Linear Recursion)</h3>
+        <div class="code-wrap">
+          <div class="code-header">
+            <span class="lang">Java</span
+            ><button class="copy-btn" onclick="copyCode(this)">Copy</button>
+          </div>
+          <pre><span class="cm">// Factorial: n! = n × (n-1) × ... × 1</span>
+<span class="cm">// Time: O(n) — makes n recursive calls</span>
+<span class="cm">// Space: O(n) — n frames on the call stack</span>
+<span class="kw">public static</span> <span class="tp">int</span> <span class="fn">factorial</span>(<span class="tp">int</span> n) {
+    <span class="kw">if</span> (n &lt;= <span class="num">1</span>) <span class="kw">return</span> <span class="num">1</span>;      <span class="cm">// Base case: 0! = 1! = 1</span>
+    <span class="kw">return</span> n * factorial(n - <span class="num">1</span>); <span class="cm">// Recursive case: n × (n-1)!</span>
+}
+<span class="cm">// factorial(4) → 4 * factorial(3)</span>
+<span class="cm">//              → 4 * 3 * factorial(2)</span>
+<span class="cm">//              → 4 * 3 * 2 * factorial(1)</span>
+<span class="cm">//              → 4 * 3 * 2 * 1 = 24</span></pre>
+        </div>
+        <p>
+          <strong>Complexity:</strong> Each call reduces <em>n</em> by 1, so
+          there are <em>n</em> calls. Each call does O(1) work (one
+          multiplication). Time = <strong>O(n)</strong>. Space =
+          <strong>O(n)</strong> (call stack depth).
+        </p>
+
+        <h3>Example 2 — Fibonacci (Tree Recursion)</h3>
+        <div class="code-wrap">
+          <div class="code-header">
+            <span class="lang">Java</span
+            ><button class="copy-btn" onclick="copyCode(this)">Copy</button>
+          </div>
+          <pre><span class="cm">// Fibonacci: fib(n) = fib(n-1) + fib(n-2)</span>
+<span class="cm">// Time: O(2ⁿ) — each call branches into two</span>
+<span class="cm">// Space: O(n) — max depth of the call tree</span>
+<span class="kw">public static</span> <span class="tp">int</span> <span class="fn">fib</span>(<span class="tp">int</span> n) {
+    <span class="kw">if</span> (n &lt;= <span class="num">1</span>) <span class="kw">return</span> n;             <span class="cm">// Base: fib(0)=0, fib(1)=1</span>
+    <span class="kw">return</span> fib(n - <span class="num">1</span>) + fib(n - <span class="num">2</span>);  <span class="cm">// Two recursive calls!</span>
+}
+<span class="cm">// This is VERY slow — fib(40) takes billions of operations.</span>
+<span class="cm">// The fix? Memoization (cache results) → O(n).</span></pre>
+        </div>
+        <p>
+          <strong>Complexity:</strong> Each call makes <em>two</em> recursive
+          calls, creating a binary tree of calls. The tree has depth <em>n</em>,
+          so roughly 2ⁿ nodes. Time = <strong>O(2ⁿ)</strong>. Space =
+          <strong>O(n)</strong> (max stack depth).
+        </p>
+
+        <!-- Fibonacci Tree Visualization -->
+        <div class="anim-panel">
+          <h4
+            style="
+              color: var(--accent);
+              font-family: var(--mono);
+              font-size: 0.82rem;
+              margin-bottom: 0.8rem;
+            "
+          >
+            FIBONACCI CALL TREE — fib(5)
+          </h4>
+          <div style="overflow-x: auto">
+            <svg
+              id="fibTree"
+              class="tree-svg"
+              viewBox="0 0 700 300"
+              xmlns="http://www.w3.org/2000/svg"
+            ></svg>
+          </div>
+          <div class="anim-controls">
+            <button class="anim-btn" onclick="animateFibTree()">
+              ▶ Animate Calls
+            </button>
+            <button class="anim-btn" onclick="resetFibTree()">Reset</button>
+          </div>
+          <div class="anim-log" id="fibLog">
+            Click "Animate Calls" to watch fib(5) execute step by step.
+          </div>
+        </div>
+
+        <h3>Example 3 — Power Function (Divide &amp; Conquer)</h3>
+        <div class="code-wrap">
+          <div class="code-header">
+            <span class="lang">Java</span
+            ><button class="copy-btn" onclick="copyCode(this)">Copy</button>
+          </div>
+          <pre><span class="cm">// Efficient power: x^n using divide &amp; conquer</span>
+<span class="cm">// Time: O(log n) — halves the exponent each step</span>
+<span class="cm">// Space: O(log n) — recursion depth</span>
+<span class="kw">public static</span> <span class="tp">double</span> <span class="fn">power</span>(<span class="tp">double</span> x, <span class="tp">int</span> n) {
+    <span class="kw">if</span> (n == <span class="num">0</span>) <span class="kw">return</span> <span class="num">1</span>;          <span class="cm">// Base: x⁰ = 1</span>
+    <span class="tp">double</span> half = power(x, n / <span class="num">2</span>); <span class="cm">// Solve half the problem</span>
+    <span class="kw">if</span> (n % <span class="num">2</span> == <span class="num">0</span>) {
+        <span class="kw">return</span> half * half;          <span class="cm">// Even: x^n = (x^(n/2))²</span>
+    } <span class="kw">else</span> {
+        <span class="kw">return</span> half * half * x;      <span class="cm">// Odd: x^n = (x^(n/2))² × x</span>
+    }
+}</pre>
+        </div>
+        <p>
+          <strong>Complexity:</strong> We halve <em>n</em> at each level. Depth
+          = log₂(n). Each level does O(1) work. Time =
+          <strong>O(log n)</strong>. Space = <strong>O(log n)</strong>.
+        </p>
+
+        <h3>Example 4 — Sum of Array (Linear Recursion)</h3>
+        <div class="code-wrap">
+          <div class="code-header">
+            <span class="lang">Java</span
+            ><button class="copy-btn" onclick="copyCode(this)">Copy</button>
+          </div>
+          <pre><span class="cm">// Recursively sum array elements</span>
+<span class="cm">// Time: O(n) — visits each element once</span>
+<span class="cm">// Space: O(n) — recursion depth equals array length</span>
+<span class="kw">public static</span> <span class="tp">int</span> <span class="fn">sumArray</span>(<span class="tp">int</span>[] arr, <span class="tp">int</span> index) {
+    <span class="kw">if</span> (index >= arr.length) <span class="kw">return</span> <span class="num">0</span>;   <span class="cm">// Base: past the end</span>
+    <span class="kw">return</span> arr[index] + sumArray(arr, index + <span class="num">1</span>);  <span class="cm">// Add current + rest</span>
+}
+<span class="cm">// Usage: sumArray(new int[]{3, 1, 4, 1, 5}, 0) → 14</span></pre>
+        </div>
+
+        <h3>Example 5 — Check if Palindrome (Tail-style Recursion)</h3>
+        <div class="code-wrap">
+          <div class="code-header">
+            <span class="lang">Java</span
+            ><button class="copy-btn" onclick="copyCode(this)">Copy</button>
+          </div>
+          <pre><span class="cm">// Check if a string is a palindrome (reads same forwards &amp; backwards)</span>
+<span class="cm">// Time: O(n) — at most n/2 comparisons</span>
+<span class="cm">// Space: O(n) — recursion depth n/2</span>
+<span class="kw">public static</span> <span class="tp">boolean</span> <span class="fn">isPalindrome</span>(<span class="tp">String</span> s, <span class="tp">int</span> left, <span class="tp">int</span> right) {
+    <span class="kw">if</span> (left >= right) <span class="kw">return</span> <span class="kw">true</span>;      <span class="cm">// Base: pointers met</span>
+    <span class="kw">if</span> (s.charAt(left) != s.charAt(right))
+        <span class="kw">return</span> <span class="kw">false</span>;                     <span class="cm">// Mismatch found</span>
+    <span class="kw">return</span> isPalindrome(s, left + <span class="num">1</span>, right - <span class="num">1</span>); <span class="cm">// Check inner chars</span>
+}
+<span class="cm">// Usage: isPalindrome("racecar", 0, 6) → true</span></pre>
+        </div>
+
+        <h3>Practice Problems</h3>
+
+        <div class="qa-block" onclick="this.classList.toggle('open')">
+          <div class="qa-question">
+            <div class="qa-icon">+</div>
+            <div class="qa-question-text">
+              Q1: Trace the execution of factorial(5). What value is returned?
+            </div>
+          </div>
+          <div class="qa-answer">
+            <div class="qa-answer-inner">
+              <p><strong>Trace:</strong></p>
+              <p>
+                <span class="inline-code">factorial(5)</span> → 5 × factorial(4)
+                → 5 × 4 × factorial(3) → 5 × 4 × 3 × factorial(2) → 5 × 4 × 3 ×
+                2 × factorial(1) → 5 × 4 × 3 × 2 × 1 = <strong>120</strong>
+              </p>
+              <p>
+                5 recursive calls are made before hitting the base case (n=1).
+                The stack unwinds, multiplying as it returns.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="qa-block" onclick="this.classList.toggle('open')">
+          <div class="qa-question">
+            <div class="qa-icon">+</div>
+            <div class="qa-question-text">
+              Q2: How many times is fib() called when computing fib(6)?
+            </div>
+          </div>
+          <div class="qa-answer">
+            <div class="qa-answer-inner">
+              <p><strong>Answer: 25 calls</strong></p>
+              <p>
+                fib(6) calls fib(5) and fib(4). fib(5) calls fib(4) and fib(3)…
+                and so on. The call tree has 25 nodes total. Notice fib(3) is
+                computed 4 separate times! This is why naïve Fibonacci is O(2ⁿ)
+                — massive redundant work.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="qa-block" onclick="this.classList.toggle('open')">
+          <div class="qa-question">
+            <div class="qa-icon">+</div>
+            <div class="qa-question-text">
+              Q3: What's the time complexity of this recursive function?<br /><code
+                style="font-size: 0.82rem; color: var(--text-dim)"
+                >void mystery(int n) { if (n &lt;= 0) return; mystery(n / 3);
+                mystery(n / 3); }</code
+              >
+            </div>
+          </div>
+          <div class="qa-answer">
+            <div class="qa-answer-inner">
+              <p>
+                <strong
+                  >Answer: O(n<sup>log₃2</sup>) ≈ O(n<sup>0.63</sup>)</strong
+                >
+              </p>
+              <p>
+                Each call makes 2 sub-calls of size n/3. Using the Master
+                Theorem: T(n) = 2T(n/3) + O(1). Here a=2, b=3, and since log₃(2)
+                ≈ 0.63 > 0 (the case where recursion dominates), we get T(n) =
+                O(n<sup>log₃2</sup>). This is sub-linear — faster than O(n)!
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════ SECTION 3: SEARCHING ═══════════════════════════ -->
+      <section class="section" id="sec-search">
+        <div class="section-num">Chapter 03</div>
+        <h2>Linear Search vs Binary Search</h2>
+
+        <p>
+          Searching is one of the most fundamental operations in computing.
+          Let's compare two approaches:
+        </p>
+
+        <p>
+          <strong>Linear search</strong> is like looking for a book by checking
+          every shelf from left to right. <strong>Binary search</strong> is like
+          looking for a word in a dictionary — you open to the middle, decide if
+          your word is in the first or second half, and keep halving.
+        </p>
+
+        <div class="callout">
+          <strong>Critical trade-off:</strong> Binary search is dramatically
+          faster (O(log n) vs O(n)), but it <em>requires a sorted array</em>.
+          Linear search works on any array, sorted or not.
+        </div>
+
+        <h3>Side-by-Side Implementation</h3>
+
+        <h4>Linear Search — O(n)</h4>
+        <div class="code-wrap">
+          <div class="code-header">
+            <span class="lang">Java</span
+            ><button class="copy-btn" onclick="copyCode(this)">Copy</button>
+          </div>
+          <pre><span class="cm">// Linear Search: check every element from start to end</span>
+<span class="cm">// Time: O(n) — worst case: element is last or not present</span>
+<span class="cm">// Space: O(1) — no extra memory needed</span>
+<span class="cm">// Works on: ANY array (sorted or unsorted)</span>
+<span class="kw">public static</span> <span class="tp">int</span> <span class="fn">linearSearch</span>(<span class="tp">int</span>[] arr, <span class="tp">int</span> target) {
+    <span class="kw">for</span> (<span class="tp">int</span> i = <span class="num">0</span>; i &lt; arr.length; i++) {
+        <span class="kw">if</span> (arr[i] == target) {
+            <span class="kw">return</span> i;   <span class="cm">// Found it! Return index</span>
+        }
+    }
+    <span class="kw">return</span> -<span class="num">1</span>;           <span class="cm">// Not found</span>
+}</pre>
+        </div>
+
+        <h4>Binary Search — O(log n)</h4>
+        <div class="code-wrap">
+          <div class="code-header">
+            <span class="lang">Java</span
+            ><button class="copy-btn" onclick="copyCode(this)">Copy</button>
+          </div>
+          <pre><span class="cm">// Binary Search: halve the search space each step</span>
+<span class="cm">// Time: O(log n) — halves n each iteration</span>
+<span class="cm">// Space: O(1) — iterative version uses constant memory</span>
+<span class="cm">// REQUIRES: sorted array</span>
+<span class="kw">public static</span> <span class="tp">int</span> <span class="fn">binarySearch</span>(<span class="tp">int</span>[] arr, <span class="tp">int</span> target) {
+    <span class="tp">int</span> low = <span class="num">0</span>, high = arr.length - <span class="num">1</span>;
+    <span class="kw">while</span> (low &lt;= high) {
+        <span class="tp">int</span> mid = low + (high - low) / <span class="num">2</span>;  <span class="cm">// Safe midpoint</span>
+        <span class="kw">if</span> (arr[mid] == target) {
+            <span class="kw">return</span> mid;           <span class="cm">// Found!</span>
+        } <span class="kw">else if</span> (arr[mid] &lt; target) {
+            low = mid + <span class="num">1</span>;          <span class="cm">// Target in right half</span>
+        } <span class="kw">else</span> {
+            high = mid - <span class="num">1</span>;         <span class="cm">// Target in left half</span>
+        }
+    }
+    <span class="kw">return</span> -<span class="num">1</span>;                    <span class="cm">// Not found</span>
+}</pre>
+        </div>
+
+        <h3>Performance Comparison</h3>
+        <p>
+          To find an element in a <strong>sorted</strong> array of 1,000,000
+          elements:
+        </p>
+        <ul>
+          <li>
+            <strong>Linear search:</strong> up to 1,000,000 comparisons (worst
+            case)
+          </li>
+          <li>
+            <strong>Binary search:</strong> at most 20 comparisons (log₂
+            1,000,000 ≈ 20)
+          </li>
+        </ul>
+        <p>
+          That's a <strong>50,000×</strong> difference. And it only grows as
+          data gets larger.
+        </p>
+
+        <h3>Interactive Binary Search Visualization</h3>
+        <div class="anim-panel">
+          <h4
+            style="
+              color: var(--accent);
+              font-family: var(--mono);
+              font-size: 0.82rem;
+              margin-bottom: 0.5rem;
+            "
+          >
+            BINARY SEARCH STEP-BY-STEP
+          </h4>
+          <p
+            style="
+              font-size: 0.82rem;
+              color: var(--text-dim);
+              margin-bottom: 0.8rem;
+            "
+          >
+            Searching for
+            <strong style="color: var(--success)">target = 42</strong> in this
+            sorted array:
+          </p>
+          <div class="array-viz" id="bsArray"></div>
+          <div class="anim-controls" style="margin-top: 1rem">
+            <button class="anim-btn" onclick="bsStep()">Next Step →</button>
+            <button class="anim-btn" onclick="bsReset()">Reset</button>
+          </div>
+          <div class="anim-log" id="bsLog">Click "Next Step" to begin.</div>
+        </div>
+
+        <h3>When to Use Which?</h3>
+        <table class="bigo-table">
+          <thead>
+            <tr>
+              <th>Scenario</th>
+              <th>Best Choice</th>
+              <th>Why</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Unsorted array, search once</td>
+              <td class="bigo-name">Linear</td>
+              <td>Can't use binary search without sorting first.</td>
+            </tr>
+            <tr>
+              <td>Sorted array, many searches</td>
+              <td class="bigo-name">Binary</td>
+              <td>O(log n) per search saves massive time.</td>
+            </tr>
+            <tr>
+              <td>Small array (< 20 elements)</td>
+              <td class="bigo-name">Either</td>
+              <td>The difference is negligible at small sizes.</td>
+            </tr>
+            <tr>
+              <td>Linked list</td>
+              <td class="bigo-name">Linear</td>
+              <td>
+                Binary search needs random access (index-based), which linked
+                lists lack.
+              </td>
+            </tr>
+            <tr>
+              <td>Unsorted array, search many times</td>
+              <td class="bigo-name">Sort + Binary</td>
+              <td>Sort once O(n log n), then O(log n) per search.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>Practice Problems</h3>
+
+        <div class="qa-block" onclick="this.classList.toggle('open')">
+          <div class="qa-question">
+            <div class="qa-icon">+</div>
+            <div class="qa-question-text">
+              Q1: You have an unsorted array of 10,000 elements and need to
+              search for one value. Should you sort it first and use binary
+              search, or just use linear search?
+            </div>
+          </div>
+          <div class="qa-answer">
+            <div class="qa-answer-inner">
+              <p><strong>Answer: Just use linear search.</strong></p>
+              <p>
+                Sorting takes O(n log n) ≈ 130,000 operations. Then binary
+                search takes O(log n) ≈ 13. Total ≈ 130,013. Linear search takes
+                at most 10,000 operations. For a single search, linear is
+                faster. The sort-then-binary approach only pays off when you
+                search many times.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="qa-block" onclick="this.classList.toggle('open')">
+          <div class="qa-question">
+            <div class="qa-icon">+</div>
+            <div class="qa-question-text">
+              Q2: Binary search on [2, 5, 8, 12, 16, 23, 38, 56, 72, 91] for
+              target 23. Trace each step.
+            </div>
+          </div>
+          <div class="qa-answer">
+            <div class="qa-answer-inner">
+              <p><strong>Trace:</strong></p>
+              <p>
+                <strong>Step 1:</strong> low=0, high=9, mid=4 → arr[4]=16 → 16
+                &lt; 23 → low = 5
+              </p>
+              <p>
+                <strong>Step 2:</strong> low=5, high=9, mid=7 → arr[7]=56 → 56 >
+                23 → high = 6
+              </p>
+              <p>
+                <strong>Step 3:</strong> low=5, high=6, mid=5 → arr[5]=23 →
+                <strong>Found at index 5!</strong>
+              </p>
+              <p>
+                Only 3 comparisons for a 10-element array. Linear search would
+                have taken 6.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════ SECTION 4: ARRAYS ═══════════════════════════ -->
+      <section class="section" id="sec-arrays">
+        <div class="section-num">Chapter 04</div>
+        <h2>Arrays: Insertion, Deletion &amp; Binary Search</h2>
+
+        <p>
+          Arrays are the most fundamental data structure — a contiguous block of
+          memory where elements sit side by side. This contiguity is what gives
+          arrays O(1) random access, but it also means insertion and deletion
+          require <em>shifting</em> elements, which costs O(n).
+        </p>
+
+        <h3>Insertion at Index</h3>
+        <p>
+          To insert at position <em>i</em>, every element from index
+          <em>i</em> onward must shift right by one to make room.
+        </p>
+
+        <div class="code-wrap">
+          <div class="code-header">
+            <span class="lang">Java</span
+            ><button class="copy-btn" onclick="copyCode(this)">Copy</button>
+          </div>
+          <pre><span class="cm">// Insert element at a given index in an array</span>
+<span class="cm">// Time: O(n) — worst case: insert at index 0, shift all n elements</span>
+<span class="cm">// Space: O(1) — shifts in-place (assumes array has capacity)</span>
+<span class="kw">public static</span> <span class="tp">int</span> <span class="fn">insertAt</span>(<span class="tp">int</span>[] arr, <span class="tp">int</span> size, <span class="tp">int</span> index, <span class="tp">int</span> value) {
+    <span class="cm">// Shift elements right to make room</span>
+    <span class="kw">for</span> (<span class="tp">int</span> i = size - <span class="num">1</span>; i >= index; i--) {
+        arr[i + <span class="num">1</span>] = arr[i];   <span class="cm">// Move each element one position right</span>
+    }
+    arr[index] = value;       <span class="cm">// Place the new element</span>
+    <span class="kw">return</span> size + <span class="num">1</span>;           <span class="cm">// New size</span>
+}
+<span class="cm">// Example: arr = [10, 20, 30, 40, _, _], size = 4</span>
+<span class="cm">// insertAt(arr, 4, 1, 15)  → [10, 15, 20, 30, 40, _], size = 5</span></pre>
+        </div>
+        <p>
+          <strong>Complexity:</strong> Inserting at index 0 shifts all
+          <em>n</em> elements → O(n). Inserting at the end shifts zero → O(1).
+          Average = O(n/2) = <strong>O(n)</strong>.
+        </p>
+
+        <h3>Interactive Insertion Visualization</h3>
+        <div class="anim-panel">
+          <h4
+            style="
+              color: var(--accent);
+              font-family: var(--mono);
+              font-size: 0.82rem;
+              margin-bottom: 0.5rem;
+            "
+          >
+            ARRAY INSERTION — Insert 25 at index 2
+          </h4>
+          <div class="array-viz" id="insertArray"></div>
+          <div class="anim-controls" style="margin-top: 1rem">
+            <button class="anim-btn" onclick="insertStep()">Next Step →</button>
+            <button class="anim-btn" onclick="insertReset()">Reset</button>
+          </div>
+          <div class="anim-log" id="insertLog">
+            Click "Next Step" to see elements shift right.
+          </div>
+        </div>
+
+        <h3>Deletion at Index</h3>
+        <p>
+          To delete at position <em>i</em>, every element after
+          <em>i</em> shifts left by one to fill the gap.
+        </p>
+
+        <div class="code-wrap">
+          <div class="code-header">
+            <span class="lang">Java</span
+            ><button class="copy-btn" onclick="copyCode(this)">Copy</button>
+          </div>
+          <pre><span class="cm">// Delete element at a given index</span>
+<span class="cm">// Time: O(n) — worst case: delete at index 0, shift all elements</span>
+<span class="cm">// Space: O(1) — in-place operation</span>
+<span class="kw">public static</span> <span class="tp">int</span> <span class="fn">deleteAt</span>(<span class="tp">int</span>[] arr, <span class="tp">int</span> size, <span class="tp">int</span> index) {
+    <span class="cm">// Shift elements left to fill the gap</span>
+    <span class="kw">for</span> (<span class="tp">int</span> i = index; i &lt; size - <span class="num">1</span>; i++) {
+        arr[i] = arr[i + <span class="num">1</span>];   <span class="cm">// Move each element one position left</span>
+    }
+    <span class="kw">return</span> size - <span class="num">1</span>;            <span class="cm">// New size</span>
+}
+<span class="cm">// Example: arr = [10, 15, 20, 30, 40], size = 5</span>
+<span class="cm">// deleteAt(arr, 5, 1)  → [10, 20, 30, 40, _], size = 4</span></pre>
+        </div>
+        <p>
+          <strong>Complexity:</strong> Same logic as insertion. Deleting from
+          index 0 shifts all → O(n). Deleting the last element shifts nothing →
+          O(1). <strong>→ O(n)</strong> in general.
+        </p>
+
+        <h3>Binary Search on Arrays</h3>
+        <p>
+          As we saw in Chapter 3, binary search on a sorted array gives us O(log
+          n) lookup. Here's the full implementation with detailed comments:
+        </p>
+
+        <div class="code-wrap">
+          <div class="code-header">
+            <span class="lang">Java</span
+            ><button class="copy-btn" onclick="copyCode(this)">Copy</button>
+          </div>
+          <pre><span class="cm">// Binary Search — complete implementation for arrays</span>
+<span class="cm">// Prerequisites: array MUST be sorted in ascending order</span>
+<span class="cm">// Time: O(log n)  |  Space: O(1)</span>
+<span class="kw">public static</span> <span class="tp">int</span> <span class="fn">binarySearchArray</span>(<span class="tp">int</span>[] arr, <span class="tp">int</span> size, <span class="tp">int</span> target) {
+    <span class="tp">int</span> low = <span class="num">0</span>;
+    <span class="tp">int</span> high = size - <span class="num">1</span>;
+
+    <span class="kw">while</span> (low &lt;= high) {
+        <span class="cm">// Calculate mid safely (avoids overflow for large arrays)</span>
+        <span class="tp">int</span> mid = low + (high - low) / <span class="num">2</span>;
+
+        <span class="kw">if</span> (arr[mid] == target) {
+            <span class="kw">return</span> mid;                <span class="cm">// Target found at mid</span>
+        } <span class="kw">else if</span> (arr[mid] &lt; target) {
+            low = mid + <span class="num">1</span>;              <span class="cm">// Discard left half</span>
+        } <span class="kw">else</span> {
+            high = mid - <span class="num">1</span>;             <span class="cm">// Discard right half</span>
+        }
+    }
+    <span class="kw">return</span> -<span class="num">1</span>;  <span class="cm">// Target not in array</span>
+}</pre>
+        </div>
+
+        <h3>Summary of Array Operation Complexities</h3>
+        <table class="bigo-table">
+          <thead>
+            <tr>
+              <th>Operation</th>
+              <th>Time</th>
+              <th>Why</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Access by index</td>
+              <td class="bigo-name">O(1)</td>
+              <td>Direct memory calculation: base + index × size</td>
+            </tr>
+            <tr>
+              <td>Insert at index <em>i</em></td>
+              <td class="bigo-name">O(n)</td>
+              <td>Must shift n - i elements right</td>
+            </tr>
+            <tr>
+              <td>Insert at end</td>
+              <td class="bigo-name">O(1)</td>
+              <td>No shifting needed (if capacity available)</td>
+            </tr>
+            <tr>
+              <td>Delete at index <em>i</em></td>
+              <td class="bigo-name">O(n)</td>
+              <td>Must shift n - i - 1 elements left</td>
+            </tr>
+            <tr>
+              <td>Delete at end</td>
+              <td class="bigo-name">O(1)</td>
+              <td>No shifting needed</td>
+            </tr>
+            <tr>
+              <td>Linear search</td>
+              <td class="bigo-name">O(n)</td>
+              <td>May scan entire array</td>
+            </tr>
+            <tr>
+              <td>Binary search (sorted)</td>
+              <td class="bigo-name">O(log n)</td>
+              <td>Halves search space each step</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>Practice Problems</h3>
+
+        <div class="qa-block" onclick="this.classList.toggle('open')">
+          <div class="qa-question">
+            <div class="qa-icon">+</div>
+            <div class="qa-question-text">
+              Q1: You have arr = [5, 10, 15, 20, 25, 30]. You call insertAt(arr,
+              6, 2, 12). What does the array look like after? How many shifts
+              occurred?
+            </div>
+          </div>
+          <div class="qa-answer">
+            <div class="qa-answer-inner">
+              <p>
+                <strong>Result:</strong> [5, 10, <strong>12</strong>, 15, 20,
+                25, 30]
+              </p>
+              <p>
+                <strong>Shifts:</strong> Elements at indices 5, 4, 3, 2 all
+                shift right → <strong>4 shifts</strong>.
+              </p>
+              <p>
+                Elements 30→idx6, 25→idx5, 20→idx4, 15→idx3. Then 12 goes into
+                index 2.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="qa-block" onclick="this.classList.toggle('open')">
+          <div class="qa-question">
+            <div class="qa-icon">+</div>
+            <div class="qa-question-text">
+              Q2: Why is insert at the beginning O(n) but insert at the end
+              O(1)?
+            </div>
+          </div>
+          <div class="qa-answer">
+            <div class="qa-answer-inner">
+              <p>
+                Inserting at index 0 means <em>every existing element</em> must
+                shift right by one position to make room — that's n shifts for n
+                elements. Inserting at the end (index = size) requires
+                <em>zero</em> shifts — you just place the element in the next
+                open slot. The shifting is what makes array insertion expensive,
+                and the amount of shifting depends on <em>where</em> you insert.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="qa-block" onclick="this.classList.toggle('open')">
+          <div class="qa-question">
+            <div class="qa-icon">+</div>
+            <div class="qa-question-text">
+              Q3: Trace a binary search for target = 8 on arr = [1, 3, 5, 7, 8,
+              12, 15, 19]. How many comparisons?
+            </div>
+          </div>
+          <div class="qa-answer">
+            <div class="qa-answer-inner">
+              <p>
+                <strong>Step 1:</strong> low=0, high=7, mid=3 → arr[3]=7 → 7
+                &lt; 8 → low = 4
+              </p>
+              <p>
+                <strong>Step 2:</strong> low=4, high=7, mid=5 → arr[5]=12 → 12 >
+                8 → high = 4
+              </p>
+              <p>
+                <strong>Step 3:</strong> low=4, high=4, mid=4 → arr[4]=8 →
+                <strong>Found at index 4!</strong>
+              </p>
+              <p>
+                <strong>3 comparisons</strong> for an 8-element array. log₂(8) =
+                3, which matches perfectly.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════ SECTION 5: CODE REFERENCE ═══════════════════════════ -->
+      <section class="section" id="sec-reference">
+        <div class="section-num">Reference</div>
+        <h2>Complete Code Reference</h2>
+        <p>
+          All code examples collected in one place, ready to copy, compile, and
+          run.
+        </p>
+
+        <h3>Big O Examples</h3>
+
+        <h4>1. Constant Time — O(1)</h4>
+        <div class="code-wrap">
+          <div class="code-header">
+            <span class="lang">Java</span
+            ><button class="copy-btn" onclick="copyCode(this)">Copy</button>
+          </div>
+          <pre><span class="kw">public static</span> <span class="tp">int</span> <span class="fn">getFirst</span>(<span class="tp">int</span>[] arr) {
+    <span class="kw">return</span> arr[<span class="num">0</span>];
+}</pre>
+        </div>
+
+        <h4>2. Linear Time — O(n)</h4>
+        <div class="code-wrap">
+          <div class="code-header">
+            <span class="lang">Java</span
+            ><button class="copy-btn" onclick="copyCode(this)">Copy</button>
+          </div>
+          <pre><span class="kw">public static</span> <span class="tp">int</span> <span class="fn">sum</span>(<span class="tp">int</span>[] arr) {
+    <span class="tp">int</span> total = <span class="num">0</span>;
+    <span class="kw">for</span> (<span class="tp">int</span> i = <span class="num">0</span>; i &lt; arr.length; i++) {
+        total += arr[i];
+    }
+    <span class="kw">return</span> total;
+}</pre>
+        </div>
+
+        <h4>3. Quadratic Time — O(n²): Bubble Sort</h4>
+        <div class="code-wrap">
+          <div class="code-header">
+            <span class="lang">Java</span
+            ><button class="copy-btn" onclick="copyCode(this)">Copy</button>
+          </div>
+          <pre><span class="kw">public static void</span> <span class="fn">bubbleSort</span>(<span class="tp">int</span>[] arr) {
+    <span class="tp">int</span> n = arr.length;
+    <span class="kw">for</span> (<span class="tp">int</span> i = <span class="num">0</span>; i &lt; n - <span class="num">1</span>; i++) {
+        <span class="kw">for</span> (<span class="tp">int</span> j = <span class="num">0</span>; j &lt; n - i - <span class="num">1</span>; j++) {
+            <span class="kw">if</span> (arr[j] > arr[j + <span class="num">1</span>]) {
+                <span class="tp">int</span> temp = arr[j];
+                arr[j] = arr[j + <span class="num">1</span>];
+                arr[j + <span class="num">1</span>] = temp;
+            }
+        }
+    }
+}</pre>
+        </div>
+
+        <h4>4. Logarithmic Time — O(log n): Binary Search</h4>
+        <div class="code-wrap">
+          <div class="code-header">
+            <span class="lang">Java</span
+            ><button class="copy-btn" onclick="copyCode(this)">Copy</button>
+          </div>
+          <pre><span class="kw">public static</span> <span class="tp">int</span> <span class="fn">binarySearch</span>(<span class="tp">int</span>[] arr, <span class="tp">int</span> target) {
+    <span class="tp">int</span> low = <span class="num">0</span>, high = arr.length - <span class="num">1</span>;
+    <span class="kw">while</span> (low &lt;= high) {
+        <span class="tp">int</span> mid = low + (high - low) / <span class="num">2</span>;
+        <span class="kw">if</span> (arr[mid] == target) <span class="kw">return</span> mid;
+        <span class="kw">else if</span> (arr[mid] &lt; target) low = mid + <span class="num">1</span>;
+        <span class="kw">else</span> high = mid - <span class="num">1</span>;
+    }
+    <span class="kw">return</span> -<span class="num">1</span>;
+}</pre>
+        </div>
+
+        <h4>5. Linearithmic Time — O(n log n)</h4>
+        <div class="code-wrap">
+          <div class="code-header">
+            <span class="lang">Java</span
+            ><button class="copy-btn" onclick="copyCode(this)">Copy</button>
+          </div>
+          <pre><span class="kw">public static void</span> <span class="fn">nLogNDemo</span>(<span class="tp">int</span> n) {
+    <span class="kw">for</span> (<span class="tp">int</span> i = <span class="num">1</span>; i &lt; n; i *= <span class="num">2</span>) {
+        <span class="kw">for</span> (<span class="tp">int</span> j = <span class="num">0</span>; j &lt; n; j++) {
+            <span class="cm">// O(1) work</span>
+        }
+    }
+}</pre>
+        </div>
+
+        <h3>Recursion Examples</h3>
+
+        <h4>1. Factorial</h4>
+        <div class="code-wrap">
+          <div class="code-header">
+            <span class="lang">Java</span
+            ><button class="copy-btn" onclick="copyCode(this)">Copy</button>
+          </div>
+          <pre><span class="kw">public static</span> <span class="tp">int</span> <span class="fn">factorial</span>(<span class="tp">int</span> n) {
+    <span class="kw">if</span> (n &lt;= <span class="num">1</span>) <span class="kw">return</span> <span class="num">1</span>;
+    <span class="kw">return</span> n * factorial(n - <span class="num">1</span>);
+}</pre>
+        </div>
+
+        <h4>2. Fibonacci</h4>
+        <div class="code-wrap">
+          <div class="code-header">
+            <span class="lang">Java</span
+            ><button class="copy-btn" onclick="copyCode(this)">Copy</button>
+          </div>
+          <pre><span class="kw">public static</span> <span class="tp">int</span> <span class="fn">fib</span>(<span class="tp">int</span> n) {
+    <span class="kw">if</span> (n &lt;= <span class="num">1</span>) <span class="kw">return</span> n;
+    <span class="kw">return</span> fib(n - <span class="num">1</span>) + fib(n - <span class="num">2</span>);
+}</pre>
+        </div>
+
+        <h4>3. Power (Divide &amp; Conquer)</h4>
+        <div class="code-wrap">
+          <div class="code-header">
+            <span class="lang">Java</span
+            ><button class="copy-btn" onclick="copyCode(this)">Copy</button>
+          </div>
+          <pre><span class="kw">public static</span> <span class="tp">double</span> <span class="fn">power</span>(<span class="tp">double</span> x, <span class="tp">int</span> n) {
+    <span class="kw">if</span> (n == <span class="num">0</span>) <span class="kw">return</span> <span class="num">1</span>;
+    <span class="tp">double</span> half = power(x, n / <span class="num">2</span>);
+    <span class="kw">if</span> (n % <span class="num">2</span> == <span class="num">0</span>) <span class="kw">return</span> half * half;
+    <span class="kw">else</span> <span class="kw">return</span> half * half * x;
+}</pre>
+        </div>
+
+        <h4>4. Recursive Array Sum</h4>
+        <div class="code-wrap">
+          <div class="code-header">
+            <span class="lang">Java</span
+            ><button class="copy-btn" onclick="copyCode(this)">Copy</button>
+          </div>
+          <pre><span class="kw">public static</span> <span class="tp">int</span> <span class="fn">sumArray</span>(<span class="tp">int</span>[] arr, <span class="tp">int</span> index) {
+    <span class="kw">if</span> (index >= arr.length) <span class="kw">return</span> <span class="num">0</span>;
+    <span class="kw">return</span> arr[index] + sumArray(arr, index + <span class="num">1</span>);
+}</pre>
+        </div>
+
+        <h4>5. Palindrome Check</h4>
+        <div class="code-wrap">
+          <div class="code-header">
+            <span class="lang">Java</span
+            ><button class="copy-btn" onclick="copyCode(this)">Copy</button>
+          </div>
+          <pre><span class="kw">public static</span> <span class="tp">boolean</span> <span class="fn">isPalindrome</span>(<span class="tp">String</span> s, <span class="tp">int</span> left, <span class="tp">int</span> right) {
+    <span class="kw">if</span> (left >= right) <span class="kw">return</span> <span class="kw">true</span>;
+    <span class="kw">if</span> (s.charAt(left) != s.charAt(right)) <span class="kw">return</span> <span class="kw">false</span>;
+    <span class="kw">return</span> isPalindrome(s, left + <span class="num">1</span>, right - <span class="num">1</span>);
+}</pre>
+        </div>
+
+        <h3>Search Examples</h3>
+
+        <h4>Linear Search</h4>
+        <div class="code-wrap">
+          <div class="code-header">
+            <span class="lang">Java</span
+            ><button class="copy-btn" onclick="copyCode(this)">Copy</button>
+          </div>
+          <pre><span class="kw">public static</span> <span class="tp">int</span> <span class="fn">linearSearch</span>(<span class="tp">int</span>[] arr, <span class="tp">int</span> target) {
+    <span class="kw">for</span> (<span class="tp">int</span> i = <span class="num">0</span>; i &lt; arr.length; i++) {
+        <span class="kw">if</span> (arr[i] == target) <span class="kw">return</span> i;
+    }
+    <span class="kw">return</span> -<span class="num">1</span>;
+}</pre>
+        </div>
+
+        <h4>Binary Search</h4>
+        <div class="code-wrap">
+          <div class="code-header">
+            <span class="lang">Java</span
+            ><button class="copy-btn" onclick="copyCode(this)">Copy</button>
+          </div>
+          <pre><span class="kw">public static</span> <span class="tp">int</span> <span class="fn">binarySearch</span>(<span class="tp">int</span>[] arr, <span class="tp">int</span> target) {
+    <span class="tp">int</span> low = <span class="num">0</span>, high = arr.length - <span class="num">1</span>;
+    <span class="kw">while</span> (low &lt;= high) {
+        <span class="tp">int</span> mid = low + (high - low) / <span class="num">2</span>;
+        <span class="kw">if</span> (arr[mid] == target) <span class="kw">return</span> mid;
+        <span class="kw">else if</span> (arr[mid] &lt; target) low = mid + <span class="num">1</span>;
+        <span class="kw">else</span> high = mid - <span class="num">1</span>;
+    }
+    <span class="kw">return</span> -<span class="num">1</span>;
+}</pre>
+        </div>
+
+        <h3>Array Operation Examples</h3>
+
+        <h4>Insert at Index</h4>
+        <div class="code-wrap">
+          <div class="code-header">
+            <span class="lang">Java</span
+            ><button class="copy-btn" onclick="copyCode(this)">Copy</button>
+          </div>
+          <pre><span class="kw">public static</span> <span class="tp">int</span> <span class="fn">insertAt</span>(<span class="tp">int</span>[] arr, <span class="tp">int</span> size, <span class="tp">int</span> index, <span class="tp">int</span> value) {
+    <span class="kw">for</span> (<span class="tp">int</span> i = size - <span class="num">1</span>; i >= index; i--) {
+        arr[i + <span class="num">1</span>] = arr[i];
+    }
+    arr[index] = value;
+    <span class="kw">return</span> size + <span class="num">1</span>;
+}</pre>
+        </div>
+
+        <h4>Delete at Index</h4>
+        <div class="code-wrap">
+          <div class="code-header">
+            <span class="lang">Java</span
+            ><button class="copy-btn" onclick="copyCode(this)">Copy</button>
+          </div>
+          <pre><span class="kw">public static</span> <span class="tp">int</span> <span class="fn">deleteAt</span>(<span class="tp">int</span>[] arr, <span class="tp">int</span> size, <span class="tp">int</span> index) {
+    <span class="kw">for</span> (<span class="tp">int</span> i = index; i &lt; size - <span class="num">1</span>; i++) {
+        arr[i] = arr[i + <span class="num">1</span>];
+    }
+    <span class="kw">return</span> size - <span class="num">1</span>;
+}</pre>
+        </div>
+      </section>
+    </main>
+
+    <!-- ═══════════════════════════ FOOTER ═══════════════════════════ -->
+    <footer>
+      <div class="container">
+        <p>Created by <strong>Khaled Sokkar</strong></p>
+        <p class="subtitle">
+          Teaching Assistant &amp; Offensive Security Engineer
+        </p>
+      </div>
+    </footer>
+
+    <!-- ═══════════════════════════ JAVASCRIPT ═══════════════════════════ -->
+    <script>
+      // ─── Copy to Clipboard ───
+      function copyCode(btn) {
+        const pre = btn.closest(".code-wrap").querySelector("pre");
+        const text = pre.textContent;
+        navigator.clipboard.writeText(text).then(() => {
+          btn.textContent = "✓ Copied";
+          btn.classList.add("copied");
+          setTimeout(() => {
+            btn.textContent = "Copy";
+            btn.classList.remove("copied");
+          }, 2000);
+        });
+      }
+
+      // ─── Big O Interactive Chart (Canvas) ───
+      (function () {
+        const canvas = document.getElementById("bigoChart");
+        const ctx = canvas.getContext("2d");
+        const dpr = window.devicePixelRatio || 1;
+        let W, H;
+        const pad = { top: 30, right: 30, bottom: 50, left: 65 };
+
+        const curves = [
+          { label: "O(1)", color: "#7ee787", fn: () => 1 },
+          {
+            label: "O(log n)",
+            color: "#6c8cff",
+            fn: (n) => Math.log2(Math.max(n, 1)),
+          },
+          { label: "O(n)", color: "#79c0ff", fn: (n) => n },
+          {
+            label: "O(n log n)",
+            color: "#d2a8ff",
+            fn: (n) => n * Math.log2(Math.max(n, 1)),
+          },
+          { label: "O(n²)", color: "#ffa657", fn: (n) => n * n },
+        ];
+
+        const maxN = 50;
+
+        function resize() {
+          const rect = canvas.getBoundingClientRect();
+          W = rect.width;
+          H = rect.height || 320;
+          canvas.width = W * dpr;
+          canvas.height = H * dpr;
+          ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+          draw();
+        }
+
+        function xScale(n) {
+          return pad.left + (n / maxN) * (W - pad.left - pad.right);
+        }
+        function yScale(v) {
+          const maxVal = maxN * maxN;
+          const clamped = Math.min(v, maxVal);
+          return pad.top + (1 - clamped / maxVal) * (H - pad.top - pad.bottom);
+        }
+
+        function draw(hoverN) {
+          ctx.clearRect(0, 0, W, H);
+
+          // Grid
+          ctx.strokeStyle = "rgba(255,255,255,0.06)";
+          ctx.lineWidth = 1;
+          for (let i = 0; i <= 5; i++) {
+            const y = pad.top + (i / 5) * (H - pad.top - pad.bottom);
+            ctx.beginPath();
+            ctx.moveTo(pad.left, y);
+            ctx.lineTo(W - pad.right, y);
+            ctx.stroke();
+          }
+          for (let n = 0; n <= maxN; n += 10) {
+            const x = xScale(n);
+            ctx.beginPath();
+            ctx.moveTo(x, pad.top);
+            ctx.lineTo(x, H - pad.bottom);
+            ctx.stroke();
+          }
+
+          // Axes labels
+          ctx.fillStyle = "#6a7089";
+          ctx.font = '11px "JetBrains Mono"';
+          ctx.textAlign = "center";
+          for (let n = 0; n <= maxN; n += 10) {
+            ctx.fillText(n, xScale(n), H - pad.bottom + 20);
+          }
+          ctx.textAlign = "right";
+          const maxVal = maxN * maxN;
+          for (let i = 0; i <= 5; i++) {
+            const val = Math.round(maxVal * (1 - i / 5));
+            const y = pad.top + (i / 5) * (H - pad.top - pad.bottom);
+            ctx.fillText(val.toLocaleString(), pad.left - 10, y + 4);
+          }
+          ctx.textAlign = "center";
+          ctx.fillText("Input size (n)", W / 2, H - 5);
+
+          // Curves
+          curves.forEach((c) => {
+            ctx.strokeStyle = c.color;
+            ctx.lineWidth = 2.5;
+            ctx.beginPath();
+            for (let n = 0; n <= maxN; n += 0.5) {
+              const x = xScale(n);
+              const y = yScale(c.fn(n));
+              if (n === 0) ctx.moveTo(x, y);
+              else ctx.lineTo(x, y);
+            }
+            ctx.stroke();
+          });
+
+          // Hover line
+          if (hoverN !== undefined && hoverN >= 0 && hoverN <= maxN) {
+            const hx = xScale(hoverN);
+            ctx.strokeStyle = "rgba(255,255,255,0.2)";
+            ctx.lineWidth = 1;
+            ctx.setLineDash([4, 4]);
+            ctx.beginPath();
+            ctx.moveTo(hx, pad.top);
+            ctx.lineTo(hx, H - pad.bottom);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            // Tooltip
+            ctx.font = '600 12px "JetBrains Mono"';
+            ctx.fillStyle = "#fff";
+            ctx.textAlign = "left";
+            let ty = pad.top + 5;
+            ctx.fillText(`n = ${Math.round(hoverN)}`, hx + 8, ty);
+            ty += 18;
+            curves.forEach((c) => {
+              const val = Math.round(c.fn(Math.round(hoverN)));
+              ctx.fillStyle = c.color;
+              ctx.fillText(`${c.label}: ${val.toLocaleString()}`, hx + 8, ty);
+              ty += 16;
+              // Dot
+              ctx.beginPath();
+              ctx.arc(hx, yScale(c.fn(Math.round(hoverN))), 4, 0, Math.PI * 2);
+              ctx.fill();
+            });
+          }
+        }
+
+        canvas.addEventListener("mousemove", (e) => {
+          const rect = canvas.getBoundingClientRect();
+          const mx = e.clientX - rect.left;
+          const n = ((mx - pad.left) / (W - pad.left - pad.right)) * maxN;
+          draw(n);
+        });
+        canvas.addEventListener("mouseleave", () => draw());
+
+        // Legend
+        const legend = document.getElementById("chartLegend");
+        curves.forEach((c) => {
+          const d = document.createElement("div");
+          d.style.cssText = `display:flex;align-items:center;gap:6px;font:500 0.78rem "JetBrains Mono";color:${c.color}`;
+          d.innerHTML = `<span style="width:14px;height:3px;border-radius:2px;background:${c.color};display:block"></span>${c.label}`;
+          legend.appendChild(d);
+        });
+
+        window.addEventListener("resize", resize);
+        resize();
+      })();
+
+      // ─── Binary Search Animation ───
+      const bsData = [3, 7, 11, 18, 24, 31, 42, 55, 63, 78, 85, 91];
+      const bsTarget = 42;
+      let bsState = { low: 0, high: bsData.length - 1, step: 0, done: false };
+
+      function bsRender() {
+        const container = document.getElementById("bsArray");
+        container.innerHTML = "";
+        bsData.forEach((val, i) => {
+          const cell = document.createElement("div");
+          cell.className = "array-cell";
+          cell.textContent = val;
+          if (bsState.done && val === bsTarget) cell.classList.add("found");
+          else if (i < bsState.low || i > bsState.high)
+            cell.classList.add("eliminated");
+          else if (!bsState.done) {
+            const mid =
+              bsState.low + Math.floor((bsState.high - bsState.low) / 2);
+            if (i === mid && bsState.step > 0) cell.classList.add("mid");
+            else if (i >= bsState.low && i <= bsState.high)
+              cell.classList.add("highlight");
+          }
+          container.appendChild(cell);
+        });
+      }
+
+      function bsStep() {
+        if (bsState.done) return;
+        if (bsState.low > bsState.high) {
+          bsState.done = true;
+          return;
+        }
+        bsState.step++;
+        const mid = bsState.low + Math.floor((bsState.high - bsState.low) / 2);
+        const log = document.getElementById("bsLog");
+        if (bsData[mid] === bsTarget) {
+          bsState.done = true;
+          log.innerHTML += `<br><span class="step">Step ${bsState.step}:</span> mid=${mid}, arr[${mid}]=${bsData[mid]} <span class="found-msg">→ Found target!</span>`;
+        } else if (bsData[mid] < bsTarget) {
+          log.innerHTML += `<br><span class="step">Step ${bsState.step}:</span> low=${bsState.low}, high=${bsState.high}, mid=${mid} → arr[${mid}]=${bsData[mid]} &lt; ${bsTarget} → search right half`;
+          bsState.low = mid + 1;
+        } else {
+          log.innerHTML += `<br><span class="step">Step ${bsState.step}:</span> low=${bsState.low}, high=${bsState.high}, mid=${mid} → arr[${mid}]=${bsData[mid]} &gt; ${bsTarget} → search left half`;
+          bsState.high = mid - 1;
+        }
+        bsRender();
+      }
+
+      function bsReset() {
+        bsState = { low: 0, high: bsData.length - 1, step: 0, done: false };
+        document.getElementById("bsLog").innerHTML =
+          'Click "Next Step" to begin.';
+        bsRender();
+      }
+      bsRender();
+
+      // ─── Insertion Animation ───
+      let insertArr = [10, 20, 30, 40, 50, null, null];
+      let insertOriginal = [10, 20, 30, 40, 50, null, null];
+      const insertIdx = 2,
+        insertVal = 25;
+      let insertState = { phase: 0 }; // 0=ready, 1-4=shifting, 5=insert, 6=done
+
+      function insertRender() {
+        const container = document.getElementById("insertArray");
+        container.innerHTML = "";
+        insertArr.forEach((val, i) => {
+          const cell = document.createElement("div");
+          cell.className = "array-cell";
+          cell.textContent = val !== null ? val : "";
+          if (val === null) cell.style.opacity = "0.3";
+          if (insertState.phase > 0 && insertState.phase < 5 && i === insertIdx)
+            cell.classList.add("insert-target");
+          if (insertState.phase === 6 && i === insertIdx)
+            cell.classList.add("found");
+          container.appendChild(cell);
+        });
+      }
+
+      function insertStep() {
+        const log = document.getElementById("insertLog");
+        if (insertState.phase === 0) {
+          insertState.phase = 1;
+          log.innerHTML =
+            '<span class="step">Shifting:</span> Move arr[4]=50 → arr[5]';
+          insertArr = [10, 20, 30, 40, null, 50, null];
+        } else if (insertState.phase === 1) {
+          insertState.phase = 2;
+          log.innerHTML +=
+            '<br><span class="step">Shifting:</span> Move arr[3]=40 → arr[4]';
+          insertArr = [10, 20, 30, null, 40, 50, null];
+        } else if (insertState.phase === 2) {
+          insertState.phase = 3;
+          log.innerHTML +=
+            '<br><span class="step">Shifting:</span> Move arr[2]=30 → arr[3]';
+          insertArr = [10, 20, null, 30, 40, 50, null];
+        } else if (insertState.phase === 3) {
+          insertState.phase = 5;
+          log.innerHTML +=
+            '<br><span class="step found-msg">Insert:</span> Place 25 at index 2';
+          insertArr = [10, 20, 25, 30, 40, 50, null];
+        } else if (insertState.phase === 5) {
+          insertState.phase = 6;
+          log.innerHTML +=
+            '<br><span class="found-msg">Done! 3 shifts + 1 insert = O(n) work.</span>';
+        }
+        insertRender();
+      }
+
+      function insertReset() {
+        insertArr = [10, 20, 30, 40, 50, null, null];
+        insertState = { phase: 0 };
+        document.getElementById("insertLog").innerHTML =
+          'Click "Next Step" to see elements shift right.';
+        insertRender();
+      }
+      insertRender();
+
+      // ─── Fibonacci Tree Animation ───
+      const fibNodes = [
+        { id: 0, label: "fib(5)", x: 350, y: 30 },
+        { id: 1, label: "fib(4)", x: 200, y: 80 },
+        { id: 2, label: "fib(3)", x: 500, y: 80 },
+        { id: 3, label: "fib(3)", x: 120, y: 135 },
+        { id: 4, label: "fib(2)", x: 280, y: 135 },
+        { id: 5, label: "fib(2)", x: 430, y: 135 },
+        { id: 6, label: "fib(1)", x: 570, y: 135 },
+        { id: 7, label: "fib(2)", x: 70, y: 195 },
+        { id: 8, label: "fib(1)", x: 170, y: 195 },
+        { id: 9, label: "fib(1)", x: 240, y: 195 },
+        { id: 10, label: "fib(0)", x: 320, y: 195 },
+        { id: 11, label: "fib(1)", x: 395, y: 195 },
+        { id: 12, label: "fib(0)", x: 465, y: 195 },
+        { id: 13, label: "fib(1)", x: 35, y: 255 },
+        { id: 14, label: "fib(0)", x: 105, y: 255 },
+      ];
+      const fibEdges = [
+        [0, 1],
+        [0, 2],
+        [1, 3],
+        [1, 4],
+        [2, 5],
+        [2, 6],
+        [3, 7],
+        [3, 8],
+        [4, 9],
+        [4, 10],
+        [5, 11],
+        [5, 12],
+        [7, 13],
+        [7, 14],
+      ];
+      // DFS post-order for animation order
+      const fibAnimOrder = [13, 14, 7, 8, 3, 9, 10, 4, 1, 11, 12, 5, 6, 2, 0];
+
+      function buildFibTree() {
+        const svg = document.getElementById("fibTree");
+        svg.innerHTML = "";
+        // Edges
+        fibEdges.forEach(([a, b]) => {
+          const line = document.createElementNS(
+            "http://www.w3.org/2000/svg",
+            "line",
+          );
+          line.setAttribute("x1", fibNodes[a].x);
+          line.setAttribute("y1", fibNodes[a].y);
+          line.setAttribute("x2", fibNodes[b].x);
+          line.setAttribute("y2", fibNodes[b].y);
+          line.setAttribute("class", "tree-edge");
+          svg.appendChild(line);
+        });
+        // Nodes
+        fibNodes.forEach((n) => {
+          const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+          g.setAttribute("class", "tree-node");
+          g.id = `fib-node-${n.id}`;
+          const c = document.createElementNS(
+            "http://www.w3.org/2000/svg",
+            "circle",
+          );
+          c.setAttribute("cx", n.x);
+          c.setAttribute("cy", n.y);
+          c.setAttribute("r", 18);
+          const t = document.createElementNS(
+            "http://www.w3.org/2000/svg",
+            "text",
+          );
+          t.setAttribute("x", n.x);
+          t.setAttribute("y", n.y);
+          t.textContent = n.label;
+          g.appendChild(c);
+          g.appendChild(t);
+          svg.appendChild(g);
+        });
+      }
+      buildFibTree();
+
+      let fibAnimIdx = 0;
+      let fibAnimInterval = null;
+
+      function animateFibTree() {
+        resetFibTree();
+        fibAnimIdx = 0;
+        const log = document.getElementById("fibLog");
+        log.innerHTML =
+          '<span class="step">Animating recursive calls (bottom-up return order)...</span>';
+        fibAnimInterval = setInterval(() => {
+          if (fibAnimIdx >= fibAnimOrder.length) {
+            clearInterval(fibAnimInterval);
+            log.innerHTML +=
+              '<br><span class="found-msg">All calls complete! fib(5) = 5</span>';
+            return;
+          }
+          const nodeId = fibAnimOrder[fibAnimIdx];
+          const node = document.getElementById(`fib-node-${nodeId}`);
+          // Previous nodes → done
+          if (fibAnimIdx > 0) {
+            const prevId = fibAnimOrder[fibAnimIdx - 1];
+            document
+              .getElementById(`fib-node-${prevId}`)
+              .classList.remove("active");
+            document.getElementById(`fib-node-${prevId}`).classList.add("done");
+          }
+          node.classList.add("active");
+          log.innerHTML += `<br>→ Evaluating ${fibNodes[nodeId].label}`;
+          fibAnimIdx++;
+        }, 500);
+      }
+
+      function resetFibTree() {
+        if (fibAnimInterval) clearInterval(fibAnimInterval);
+        fibNodes.forEach((n) => {
+          const el = document.getElementById(`fib-node-${n.id}`);
+          if (el) {
+            el.classList.remove("active", "done");
+          }
+        });
+        document.getElementById("fibLog").innerHTML =
+          'Click "Animate Calls" to watch fib(5) execute step by step.';
+      }
+    </script>
+  </body>
+</html>
